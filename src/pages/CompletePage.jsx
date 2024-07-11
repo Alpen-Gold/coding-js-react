@@ -190,6 +190,11 @@ function CompletePage() {
                   question.completeCode ||
                   `function ${question.fun_name} {\n\t//Sizga omad tilaymiz 😇 \n\n}`
                 }`}
+                onClick={() => {
+                  if (editorRef.current) {
+                    editorRef.current.focus();
+                  }
+                }}
                 onMount={onMount}
                 onChange={(event) => setCode(event)}
               />
