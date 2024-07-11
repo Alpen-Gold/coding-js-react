@@ -1,0 +1,367 @@
+@import url("https://fonts.googleapis.com/css2?family=Anonymous+Pro&family=Cousine&display=swap");
+
+* {
+  font-family: "Cousine", monospace;
+}
+
+.container {
+  max-width: 1380px;
+  height: 100%;
+}
+
+a {
+  text-decoration: none !important ;
+  color: white !important;
+}
+
+body {
+  background-color: rgb(20, 28, 35) !important;
+  color: white !important;
+  min-height: 100vh;
+}
+
+ul {
+  padding: 0;
+  list-style-position: inside;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1f1f2b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #303041;
+  border-radius: 12px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #11101f;
+}
+
+.btn {
+  background-color: #1f1f2b !important;
+  color: white !important;
+  padding: 8px 24px !important;
+  margin: 3px !important;
+}
+
+.btn:hover {
+  background-color: #11101f !important;
+  color: gold !important;
+}
+
+.result-badge {
+  padding: 4px 10px;
+  width: 200px;
+}
+
+.text-gold {
+  color: gold;
+}
+
+.cursor:hover {
+  cursor: pointer;
+  color: gold;
+}
+
+header {
+  border-bottom: 0.2px solid #303041;
+}
+
+.set-box {
+  padding: 20px;
+  border-radius: 20px;
+  background-color: rgb(39, 47, 53);
+  margin-bottom: 30px;
+  transition: 0.5s;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.set-box:hover {
+  cursor: pointer;
+  color: gold;
+}
+
+.set-box:hover circle {
+  stroke: gold;
+}
+
+.set-box .set-title {
+  font-size: 24px;
+}
+
+.set-box .problem-number {
+  font-size: 14px;
+}
+
+.skill {
+  height: 80px;
+  width: 80px;
+  position: relative;
+}
+
+.outer {
+  height: 80px;
+  width: 80px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 80%;
+  background-color: rgb(20, 28, 35);
+  box-shadow: inset 0px 0px 39px 7px #1f1f2b;
+  box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2666666667);
+}
+
+.inner {
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#number {
+  font-weight: 600;
+  color: white;
+}
+
+circle {
+  fill: none;
+  stroke: white;
+  stroke-width: 5px;
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  transition: stroke-dashoffset 2s linear;
+}
+
+svg {
+  position: absolute;
+}
+
+.left-box {
+  padding: 0 15px;
+}
+
+.left-box .nav {
+  width: 100%;
+  background-color: #303041;
+  border-radius: 10px;
+}
+
+.left-box .nav .nav-link {
+  color: #5f5f75;
+  padding: 15px;
+  border-bottom: 1px solid #1f1f2b;
+  text-align: left;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-box .nav .nav-link:hover {
+  color: #5255d1;
+}
+
+.left-box .nav .active {
+  background-color: transparent !important;
+  color: white;
+}
+
+.right-box {
+  padding: 0 25px;
+}
+
+.right-box .row {
+  padding: 20px 10px;
+  border-radius: 10px;
+  background-color: #303041;
+}
+
+.right-box .home-text {
+  text-align: justify;
+}
+
+.right-box .editor {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.right-box .editor .gutter {
+  background: #11101f;
+  color: white;
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  flex-flow: column wrap;
+  padding: 10px 5px 0;
+}
+
+.right-box .editor .gutter span {
+  padding: 1rem 0.5rem 0;
+  color: white;
+}
+
+.right-box .editor textarea {
+  background: #1f1f2b;
+  min-height: 460px;
+  flex: 1;
+  border-radius: 0 10px 10px 0;
+  font-size: 18px;
+  border: 0;
+  color: white;
+  padding: 20px 1rem;
+  line-height: 2.2;
+  overflow: hidden;
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+}
+
+.right-box .editor textarea:focus {
+  outline: none;
+}
+
+.right-box #result {
+  height: 230px;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #1f1f2b;
+  overflow: auto;
+}
+
+.isonTime {
+  color: gold;
+}
+
+.bg-color-black {
+  background-color: rgb(20, 28, 35) !important;
+  outline: none !important;
+  border: none !important;
+}
+
+.set-bg-color {
+  padding: 20px;
+  border-radius: 20px;
+  background-color: rgb(39, 47, 53);
+  margin-bottom: 40px !important;
+  transition: 0.5s;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+#question-ptoverka {
+  min-width: 550px !important;
+}
+
+#question-element {
+  margin: 20px 0;
+  margin-bottom: 1px;
+}
+
+.questionCheck {
+  max-height: 400px;
+  max-width: 700px;
+  overflow: auto;
+}
+
+.bg-red {
+  background-color: red !important;
+}
+
+.bg-green {
+  background-color: green !important;
+}
+
+#question-ptoverka {
+  width: 100%;
+  height: 400px !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding: 20px !important;
+  padding-left: 0;
+  background-color: #1e1e1e;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2666666667);
+  margin-bottom: 50px;
+}
+
+@media screen and (max-width: 630px) {
+  #question-ptoverka {
+    min-width: 100% !important;
+  }
+}
+
+.cheked-icon {
+  color: gold;
+}
+
+/* spenner */
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  color: gold;
+  background: radial-gradient(
+    farthest-side,
+    currentColor calc(100% - 7px),
+    #0000 calc(100% - 6px) 0
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - 15px),
+    #000 calc(100% - 13px)
+  );
+  border-radius: 50%;
+  animation: spinner-sm4bhi 2s infinite linear;
+}
+
+.spinner::before,
+.spinner::after {
+  content: "";
+  grid-area: 1/1;
+  background: linear-gradient(currentColor 0 0) center,
+    linear-gradient(currentColor 0 0) center;
+  background-size: 100% 11px, 11px 100%;
+  background-repeat: no-repeat;
+}
+
+.spinner::after {
+  transform: rotate(45deg);
+}
+
+@keyframes spinner-sm4bhi {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+.ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: #1f1f2b !important;
+  color: white !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  margin: 3px !important;
+}
+
+:where(.css-dev-only-do-not-override-3rel02).ant-select-dropdown {
+  background-color: #1f1f2b !important;
+  color: white !important;
+}
+
+.ant-select-item.ant-select-item-option {
+  background-color: #1f1f2b !important;
+  color: white !important;
+}
