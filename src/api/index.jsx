@@ -5,7 +5,9 @@ import {
   setAllQuestions,
   setHomeQuestionData,
   setQuestion,
+  setQuestionsForProtsent,
 } from "../store/slices/SliceDatas";
+import { LANGUAGE_VERSIONS } from "../constants/constants";
 
 const baseUrlEditor = axios.create({
   baseURL: "https://emkc.org/api/v2/piston/",
@@ -50,12 +52,56 @@ export const getQuestions = async (dispatch, id, localCheked) => {
         return {
           ...item,
           cheked: false,
-          completeCode: "",
+          completeCode: {
+            javascript: "",
+            java: "",
+            php: "",
+            python: "",
+          },
         };
       }
     });
 
     dispatch(setAllQuestions(newData));
+  } catch (error) {
+    dispatch(handleError(error));
+    dispatch(handleLoading(false));
+  } finally {
+    dispatch(handleLoading(false));
+  }
+};
+
+export const getQuestionsForProsent = async (dispatch, localCheked) => {
+  dispatch(handleLoading(true));
+
+  try {
+    const response = await axios.get(`questions`);
+
+    console.log(response.data, "questions for the protsent");
+    const newData = response.data.map((item) => {
+      const localItem = localCheked.find((item1) => item1.id === item.id);
+
+      if (localItem) {
+        return {
+          ...item,
+          cheked: true,
+          completeCode: localItem.completeCode,
+        };
+      } else {
+        return {
+          ...item,
+          cheked: false,
+          completeCode: {
+            javascript: "",
+            java: "",
+            php: "",
+            python: "",
+          },
+        };
+      }
+    });
+
+    dispatch(setQuestionsForProtsent(newData));
   } catch (error) {
     dispatch(handleError(error));
     dispatch(handleLoading(false));
@@ -80,22 +126,37 @@ export const getQuestion = async (dispatch, id) => {
     dispatch(handleLoading(false));
   }
 };
-
-export const executeCode = async (sourceCode, check, startSize) => {
+export const executeCode = async (
+  sourceCode,
+  check,
+  startSize,
+  lastLang,
+  forTheChekLog
+) => {
   try {
-    const checkList = `${sourceCode} ${check.map((item) => {
-      return `
-        console.log(${startSize.slice(0, startSize.indexOf(" "))}(${item}))
-        `;
-    })}`;
+    if (!LANGUAGE_VERSIONS[lastLang]) {
+      throw new alert(`Unsupported language: ${lastLang}`);
+    }
 
-    console.log(checkList);
+    const languageVersion = LANGUAGE_VERSIONS[lastLang];
+
+    const checkList = `${sourceCode} ${check
+      .map((item) => {
+        return `
+        console.log(${startSize.slice(0, startSize.indexOf(" "))}(${item}))
+      `;
+      })
+      .join("")}`;
+
+    console.log(forTheChekLog(sourceCode, check, startSize, lastLang));
+    // console.log(checkList);
+
     const response = await baseUrlEditor.post("execute", {
-      language: "javascript",
-      version: "18.15.0",
+      language: lastLang,
+      version: String(languageVersion),
       files: [
         {
-          content: checkList,
+          content: forTheChekLog(sourceCode, check, startSize, lastLang),
         },
       ],
     });

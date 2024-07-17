@@ -1,4 +1,5 @@
 import { asyncThunkCreator, createSlice } from "@reduxjs/toolkit";
+import { LANGUAGE_VERSIONS } from "../../constants/constants";
 
 export const allDataSlice = createSlice({
   name: "data-store",
@@ -9,6 +10,7 @@ export const allDataSlice = createSlice({
     loading: false,
     handleError: "",
     localCheked: JSON.parse(localStorage.getItem("masala-js")) || [],
+    questionsForProtsent: [],
   },
   reducers: {
     setHomeQuestionData: (state, action) => {
@@ -30,8 +32,20 @@ export const allDataSlice = createSlice({
           cheked: true,
         };
       } else {
-        state.question = { ...action.payload, completeCode: "", cheked: false };
+        state.question = {
+          ...action.payload,
+          completeCode: {
+            javascript: "",
+            java: "",
+            php: "",
+            python: "",
+          },
+          cheked: false,
+        };
       }
+    },
+    setQuestionsForProtsent: (state, action) => {
+      state.questionsForProtsent = action.payload;
     },
 
     handleLoading: (state, action) => {
@@ -41,18 +55,28 @@ export const allDataSlice = createSlice({
     handleError: (state, action) => {
       state.error = action.payload;
     },
-
     chekedQuestion: (state, action) => {
       const findId = state.localCheked.findIndex(
         (old) => old.id === action.payload.id
       );
 
       if (findId !== -1) {
-        state.localCheked[findId].completeCode = action.payload.chekedCode;
+        state.localCheked[findId].completeCode = {
+          ...state.localCheked[findId]?.completeCode,
+          [action.payload.typelang]: action.payload.chekedCode,
+        };
       } else {
         state.localCheked.push({
           id: action.payload.id,
-          completeCode: action.payload.chekedCode,
+          completeCode: {
+            ...{
+              javascript: "",
+              java: "",
+              php: "",
+              python: "",
+            },
+            [action.payload.typelang]: action.payload.chekedCode,
+          },
           cheked: true,
         });
       }
@@ -68,6 +92,7 @@ export const {
   handleError,
   setQuestion,
   chekedQuestion,
+  setQuestionsForProtsent,
 } = allDataSlice.actions;
 
 export default allDataSlice.reducer;
