@@ -8,6 +8,7 @@ import {
   setQuestionsForProtsent,
 } from "../store/slices/SliceDatas";
 import { LANGUAGE_VERSIONS } from "../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const baseUrlEditor = axios.create({
   baseURL: "https://emkc.org/api/v2/piston/",
@@ -165,5 +166,31 @@ export const executeCode = async (
     return response.data;
   } catch (error) {
     alert(error);
+  }
+};
+
+export const getQuestionPog = async (item) => {
+  const { dispatch, indexQuestion, navigate, handlePH, questionId } = item;
+
+  dispatch(handleLoading(true));
+
+  try {
+    const response = await axios.get(
+      `questions?page=${
+        handlePH === "previous" ? indexQuestion : indexQuestion + 2
+      } &limit=1`
+    );
+
+    console.log(response.data, "question for pog");
+
+    const id = response.data.items[0].id;
+
+    navigate(`/${questionId}/${id}`);
+    // dispatch(setQuestion(response.data[0]));
+  } catch (error) {
+    dispatch(handleError(error));
+    dispatch(handleLoading(false));
+  } finally {
+    dispatch(handleLoading(false));
   }
 };

@@ -10,18 +10,25 @@ import {
 import AllPages from "./pages/AllPages";
 import QuestionPage from "./pages/QuestionPage";
 import CompletePage from "./pages/CompletePage";
+import LoginPage from "./login/Login";
+import Leyout from "./admin/Leyout";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<AllPages />}>
-        <Route index element={<HomeQuestions />}></Route>
-        <Route path=":questionId" element={<QuestionPage />}></Route>
-        <Route
-          path=":questionId/:completeQuestion"
-          element={<CompletePage />}
-        ></Route>
-      </Route>
+      <>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/" element={<AllPages />}>
+          <Route index element={<HomeQuestions />}></Route>
+          <Route path=":questionId" element={<QuestionPage />}></Route>
+          <Route
+            path=":questionId/:completeQuestion"
+            element={<CompletePage />}
+          ></Route>
+        </Route>
+
+        <Route path="/admin" element={<Leyout />}></Route>
+      </>
     )
   );
   return (

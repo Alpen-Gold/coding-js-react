@@ -11,6 +11,7 @@ export const allDataSlice = createSlice({
     handleError: "",
     localCheked: JSON.parse(localStorage.getItem("masala-js")) || [],
     questionsForProtsent: [],
+    editorColor: true,
   },
   reducers: {
     setHomeQuestionData: (state, action) => {
@@ -55,6 +56,11 @@ export const allDataSlice = createSlice({
     handleError: (state, action) => {
       state.error = action.payload;
     },
+
+    handleEditorColor: (state, action) => {
+      state.editorColor = action.payload;
+    },
+
     chekedQuestion: (state, action) => {
       const findId = state.localCheked.findIndex(
         (old) => old.id === action.payload.id
@@ -93,6 +99,7 @@ export const {
   setQuestion,
   chekedQuestion,
   setQuestionsForProtsent,
+  handleEditorColor,
 } = allDataSlice.actions;
 
 export default allDataSlice.reducer;

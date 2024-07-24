@@ -1,25 +1,39 @@
+import { Editor } from "@monaco-editor/react";
 import React, { useEffect, useRef, useState } from "react";
-import { executeCode, getQuestion } from "../api";
+import {
+  executeCode,
+  getQuestion,
+  getQuestionPog,
+  getQuestions,
+  getQuestionsForProsent,
+} from "../api";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaCircleCheck, FaHouse } from "react-icons/fa6";
 import { useAsyncEffect } from "ahooks";
-import { Editor } from "@monaco-editor/react";
 import { Select } from "antd";
 import { LANGUAGE_VERSIONS } from "../constants/constants";
 import { chekedQuestion } from "../store/slices/SliceDatas";
 import Confetti from "https://cdn.skypack.dev/react-confetti@6.0.0";
 import MenuItem from "antd/es/menu/MenuItem";
 import { RiFullscreenExitLine, RiFullscreenFill } from "react-icons/ri";
+import EditorSection from "../components/CompletePage/EditorSection";
 const languages = Object.keys(LANGUAGE_VERSIONS);
 
 function CompletePage() {
   const dispatch = useDispatch();
   const editorRef = useRef();
-  const { localCheked, allQuestions, question, loading, error } = useSelector(
-    (store) => store.allData
-  );
-  const { completeQuestion } = useParams();
+  const {
+    question,
+    loading,
+    error,
+    allQuestions,
+    questionsForProtsent,
+    localCheked,
+    editorColor,
+  } = useSelector((store) => store.allData);
+  const { completeQuestion, questionId } = useParams();
+  const navigate = useNavigate();
   const [code, setCode] = useState(question.completeCode);
   const [lanSelect, setLanSelect] = useState(languages);
   const [lastLang, setLastLang] = useState("javascript");
@@ -27,6 +41,14 @@ function CompletePage() {
   const [allCheked, setAllCheked] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [fullEkran, setFullEkran] = useState(false);
+  const [nextPre, setNextPre] = useState(
+    localStorage.getItem("pog-masala-js") || 0
+  );
+
+  const onMount = (editor) => {
+    editorRef.current = editor;
+    editor.focus();
+  };
 
   useAsyncEffect(async () => {
     await getQuestion(dispatch, completeQuestion);
@@ -50,10 +72,13 @@ function CompletePage() {
     }
   }, [myResult]);
 
-  const onMount = (editor) => {
-    editorRef.current = editor;
-    editor.focus();
-  };
+  useEffect(() => {
+    const index = allQuestions.findIndex(
+      (item) => item.id === completeQuestion
+    );
+    localStorage.setItem("pog-masala-js", index);
+    setNextPre(index);
+  }, [allQuestions, completeQuestion]);
 
   const arraysEqual = (a, b) => {
     if (!Array.isArray(a) || !Array.isArray(b)) return false;
@@ -86,8 +111,39 @@ function CompletePage() {
     setLastLang(value);
   };
 
+  const pogination = async (handlePH) => {
+    await getQuestionsForProsent(dispatch, localCheked);
+    await getQuestions(dispatch, questionId, localCheked);
+
+    const indexQuestion = questionsForProtsent.findIndex(
+      (item) => item.id === completeQuestion
+    );
+
+    setNextPre(allQuestions.findIndex((item) => item.id === completeQuestion));
+
+    console.log(allQuestions[nextPre + 1], "firdavs");
+
+    if (handlePH === "previous") {
+      await getQuestionPog({
+        dispatch,
+        indexQuestion,
+        navigate,
+        questionId,
+        handlePH,
+      });
+    } else {
+      await getQuestionPog({
+        dispatch,
+        indexQuestion,
+        navigate,
+        questionId,
+        handlePH,
+      });
+    }
+  };
+
   const getDefaultValueForLanguage = (language, oldCode) => {
-    console.log(oldCode, "test");
+    // console.log(oldCode, "test");
     switch (language) {
       case "javascript":
         return (
@@ -169,8 +225,18 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading)
+    return (
+      <div className=" d-flex mt-4 justify-center">
+        <div className="spinner"></div>
+      </div>
+    );
+  if (error)
+    return (
+      <div className=" d-flex mt-4 justify-center text-red-600">
+        You have problem or your connection is not working!
+      </div>
+    );
 
   return (
     <>
@@ -190,17 +256,37 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
                 : "col-xl-6"
             }`}
           >
-            <div className="btns d-flex">
-              <button className="home btn  d-flex justify-center align-items-center">
+            <div className="btns d-flex gap-2">
+              <button
+                className="home btn py-3  next-question d-flex justify-center align-items-center"
+                onClick={() => navigate("/")}
+              >
                 <FaHouse />
               </button>
 
-              <button className="left-exit btn  d-flex justify-center align-items-center">
+              <button
+                className={`left-exit btn py-3 next-question d-flex justify-center align-items-center`}
+                onClick={() => navigate(`/${questionId}`)}
+              >
                 <FaArrowLeft />
               </button>
+              <button
+                className={`left-exit btn  next-question d-flex justify-center align-items-center ${
+                  nextPre > 0 ? "" : "d-none"
+                }`}
+                onClick={() => pogination("previous")}
+              >
+                Previous
+              </button>
 
-              <button className="next-question btn">Keyingi</button>
-              <button className="next-question btn">Orqaga</button>
+              <button
+                className={`left-exit btn next-question d-flex justify-center align-items-center ${
+                  nextPre + 1 < allQuestions.length ? "" : "d-none"
+                }`}
+                onClick={() => pogination("next")}
+              >
+                Next
+              </button>
             </div>
 
             <h1 id="question-title" className="my-3">
@@ -296,13 +382,28 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
                 ))}
               </Select>
             </div>
+
+            {/* Editor Section */}
+
+            <EditorSection
+              lastLang={lastLang}
+              editorColor={editorColor}
+              getDefaultValueForLanguage={getDefaultValueForLanguage}
+              question={question}
+              editorRef={editorRef}
+              onMount={onMount}
+              setCode={setCode}
+            />
+
+            {/* 
+           
             <div id="question-ptoverka" className="">
-              {/* Editor to the test ! */}
+            
               <Editor
                 height={"600px"}
                 width={"100%"}
                 language={lastLang}
-                theme={"vs-dark"}
+                theme={`vs-${editorColor ? "dark" : "light"}`}
                 value={getDefaultValueForLanguage(lastLang, question)}
                 onClick={() => {
                   if (editorRef.current) {
@@ -313,6 +414,8 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
                 onChange={(event) => setCode(event)}
               />
             </div>
+
+           */}
             <div className="text-end">
               <button
                 className="btn"
