@@ -5,17 +5,19 @@ import client, {
   DATABASE_ID,
   databases,
 } from "../../appwriteConfig";
-import axios from "axios";
-import { Client, ID, Query } from "appwrite";
+import { ID, Query } from "appwrite";
+import { useSelector } from "react-redux";
 
 const ChatSection = () => {
+  const { user } = useSelector((store) => store.allData);
+
   const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState("");
 
   useEffect(() => {
     getMessages();
 
-    client.subscribe(
+    const permission = client.subscribe(
       [
         `databases.${DATABASE_ID}.collections.${COLLECTION_ID_MESSAGES}.documents`,
         "files",
@@ -45,6 +47,10 @@ const ChatSection = () => {
         }
       }
     );
+
+    return () => {
+      permission();
+    };
   }, []);
 
   const getMessages = async () => {
@@ -62,6 +68,8 @@ const ChatSection = () => {
     e.preventDefault();
 
     const payload = {
+      user_id: user.$id,
+      username: user.name,
       body: messageBody,
     };
 
@@ -72,7 +80,6 @@ const ChatSection = () => {
       payload
     );
 
-    // setMessages((old) => [response, ...messages]);
     console.log("Created!", response);
     setMessageBody("");
   };
@@ -84,10 +91,6 @@ const ChatSection = () => {
       COLLECTION_ID_MESSAGES,
       message_id
     );
-
-    // setMessages((old) =>
-    //   messages.filter((oldItem) => oldItem.$id !== message_id)
-    // );
   };
 
   return (
@@ -108,10 +111,6 @@ const ChatSection = () => {
             </div>
           );
         })}
-
-        {/* <div className="message sent">
-          <p>I'm good, thanks! How about you?</p>
-        </div> */}
       </div>
       <form id="message--form" onSubmit={handleSubmit}>
         <div className="message-input">
@@ -169,7 +168,6 @@ const ChatContainer = styled.div`
         text-align: left;
         border: 1px solid #ddd;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        min-width: 100%;
       }
 
       &.sent {
@@ -178,7 +176,6 @@ const ChatContainer = styled.div`
         border: 1px solid #b8daff;
         margin-left: auto;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        min-width: 100%;
       }
 
       p {

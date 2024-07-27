@@ -6,9 +6,12 @@ import {
   setHomeQuestionData,
   setQuestion,
   setQuestionsForProtsent,
+  setUser,
 } from "../store/slices/SliceDatas";
 import { LANGUAGE_VERSIONS } from "../constants/constants";
 import { useNavigate } from "react-router-dom";
+import { account } from "../appwriteConfig";
+import { ID } from "appwrite";
 
 const baseUrlEditor = axios.create({
   baseURL: "https://emkc.org/api/v2/piston/",
@@ -192,5 +195,74 @@ export const getQuestionPog = async (item) => {
     dispatch(handleLoading(false));
   } finally {
     dispatch(handleLoading(false));
+  }
+};
+
+// export const getUserOnLoad = async (dispatch) => {
+//   try {
+//     const accountDetails = await account.get();
+
+//     dispatch(setUser(accountDetails));
+//   } catch (error) {
+//     alert(error);
+//   }
+// };
+
+export const handleUserLogin = async (e, user, dispatch, navigate) => {
+  e.preventDefault();
+
+  try {
+    const accountDetailse = await account.get();
+
+    // log out shu erda
+    if (accountDetailse) {
+      console.log("test login kirgan !", accountDetailse);
+      await account.deleteSession("current");
+    }
+
+    const response = await account.createEmailPasswordSession(
+      user.email,
+      user.password
+    );
+
+    dispatch(setUser(accountDetailse));
+
+    navigate("/");
+
+    console.log("login ", response);
+  } catch (error) {
+    alert(error);
+  }
+};
+
+export const handleUserRegister = async (e, user, dispatch, navigate) => {
+  e.preventDefault();
+
+  try {
+    try {
+      await account.deleteSession("current");
+    } catch (sessionError) {
+      console.log("No active session found.");
+    }
+
+    const response = await account.create(
+      ID.unique(),
+      user.email,
+      user.password,
+      user.name
+    );
+
+    console.log("REGISTER!", response);
+
+    await account.createEmailPasswordSession(user.email, user.password);
+
+    const accountDetailse = await account.get();
+
+    console.log("account detailse!", accountDetailse);
+
+    dispatch(setUser(accountDetailse));
+    navigate("/");
+  } catch (error) {
+    alert(error);
   }
 };

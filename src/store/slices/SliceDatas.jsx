@@ -12,6 +12,7 @@ export const allDataSlice = createSlice({
     localCheked: JSON.parse(localStorage.getItem("masala-js")) || [],
     questionsForProtsent: [],
     editorColor: true,
+    user: null,
   },
   reducers: {
     setHomeQuestionData: (state, action) => {
@@ -53,6 +54,9 @@ export const allDataSlice = createSlice({
       state.loading = action.payload;
     },
 
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
     handleError: (state, action) => {
       state.error = action.payload;
     },
@@ -100,6 +104,7 @@ export const {
   chekedQuestion,
   setQuestionsForProtsent,
   handleEditorColor,
+  setUser,
 } = allDataSlice.actions;
 
 export default allDataSlice.reducer;

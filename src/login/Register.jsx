@@ -1,76 +1,74 @@
 import * as React from "react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { handleUserLogin } from "../api";
+import { handleUserRegister } from "../api";
 
-function LoginPage() {
+function RegisterPage() {
   const navigate = useNavigate();
-
-  const { user } = useSelector((store) => store.allData);
   const dispatch = useDispatch();
-  const [loginValues, setLoginValues] = useState({
+  const [registerValues, setRegisterValues] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
-  // React.useEffect(() => {
-  //   getUserOnLoad(dispatch);
-  // }, [dispatch]);
-
-  const handleLogin = () => {
-    props.setAdminActivated(true);
-    localStorage.setItem("logged-form-massala-ja", "true");
-    navigate("/");
-  };
-
-  const changeLogin = (name, value) => {
-    setLoginValues({
-      ...loginValues,
+  const changeRegister = (name, value) => {
+    setRegisterValues({
+      ...registerValues,
       [name]: value,
     });
-
-    console.log(loginValues);
+    console.log(registerValues);
   };
 
-  const sabmitLogin = async (event) => {
-    await handleUserLogin(event, loginValues, dispatch, navigate);
+  const submitRegister = async (event) => {
+    if (registerValues.password !== registerValues.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    await handleUserRegister(event, registerValues, dispatch, navigate);
   };
 
   return (
     <StyledContainer>
       <div className="inner-container">
         <input
+          name="name"
+          type="text"
+          value={registerValues.name}
+          onChange={(e) => changeRegister(e.target.name, e.target.value)}
+          placeholder="Name"
+        />
+        <input
           name="email"
           type="email"
-          value={loginValues.email}
-          onChange={(e) => changeLogin(e.target.name, e.target.value)}
+          value={registerValues.email}
+          onChange={(e) => changeRegister(e.target.name, e.target.value)}
           placeholder="E-mail"
         />
         <input
           name="password"
           type="password"
-          value={loginValues.password}
-          onChange={(e) => changeLogin(e.target.name, e.target.value)}
-          placeholder="Password:12345"
+          value={registerValues.password}
+          onChange={(e) => changeRegister(e.target.name, e.target.value)}
+          placeholder="Password"
         />
-
-        <button
-          className="text-black"
-          onClick={() => {
-            navigate("/register");
-          }}
-        >
-          I do not have account !
-        </button>
-        <button onClick={sabmitLogin}>Tizimga kirish</button>
+        <input
+          name="confirmPassword"
+          type="password"
+          value={registerValues.confirmPassword}
+          onChange={(e) => changeRegister(e.target.name, e.target.value)}
+          placeholder="Confirm Password"
+        />
+        <button onClick={submitRegister}>Ro'yxatdan o'tish</button>
       </div>
     </StyledContainer>
   );
 }
 
-export default LoginPage;
+export default RegisterPage;
 
 // Styled Components
 const StyledContainer = styled.div`
