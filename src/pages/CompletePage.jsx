@@ -250,7 +250,11 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
       )}
       <div className="set-bg-color" id="question-element">
         <div className="row" id="cards-question">
-          {/* <ResultSection
+
+
+
+
+           <ResultSection
             fullEkran={fullEkran}
             navigate={navigate}
             questionId={questionId}
@@ -259,9 +263,8 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
             pogination={pogination}
             question={question}
             myResult={myResult}
-          /> */}
+          />
 
-          <ChatSection />
 
           <div
             className={`card-question mt-5 m-xl-0 col-12 col-lg-12 ${
@@ -323,6 +326,7 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
               </button>
             </div>
           </div>
+          <ChatSection />
         </div>
       </div>
     </>
