@@ -10,16 +10,12 @@ import {
 import AllPages from "./pages/AllPages";
 import QuestionPage from "./pages/QuestionPage";
 import CompletePage from "./pages/CompletePage";
-import LoginPage from "./login/Login";
 import Leyout from "./admin/Leyout";
-import RegisterPage from "./login/Register";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/login" element={<LoginPage />}></Route>
-        <Route path="/register" element={<RegisterPage />}></Route>
         <Route path="/" element={<AllPages />}>
           <Route index element={<HomeQuestions />}></Route>
           <Route path=":questionId" element={<QuestionPage />}></Route>

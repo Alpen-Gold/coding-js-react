@@ -15,7 +15,6 @@
     "@reduxjs/toolkit": "^2.2.6",
     "ahooks": "^3.8.0",
     "antd": "^5.18.0",
-    "appwrite": "^15.0.0",
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "localforage": "^1.10.0",

@@ -1,134 +1,49 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import client, {
-  COLLECTION_ID_MESSAGES,
-  DATABASE_ID,
-  databases,
-} from "../../appwriteConfig";
-import { ID, Query } from "appwrite";
-import { useSelector } from "react-redux";
+
+
 
 const ChatSection = () => {
-  const { user } = useSelector((store) => store.allData);
 
   const [messages, setMessages] = useState([]);
   const [messageBody, setMessageBody] = useState("");
-
-  useEffect(() => {
-    getMessages();
-
-    const permission = client.subscribe(
-      [
-        `databases.${DATABASE_ID}.collections.${COLLECTION_ID_MESSAGES}.documents`,
-        "files",
-      ],
-      (response) => {
-        console.log("REAL_TIME", response);
-
-        if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.create"
-          )
-        ) {
-          console.log("MESSAGE WAS CREATED!");
-          setMessages((old) => [response.payload, ...old]);
-        }
-
-        if (
-          response.events.includes(
-            "databases.*.collections.*.documents.*.delete"
-          )
-        ) {
-          console.log("MESSAGE WAS DELETED!");
-
-          setMessages((old) =>
-            old.filter((oldItem) => oldItem.$id !== response.payload.$id)
-          );
-        }
-      }
-    );
-
-    return () => {
-      permission();
-    };
-  }, []);
-
-  const getMessages = async () => {
-    const response = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID_MESSAGES,
-      [Query.orderDesc("$createdAt"), Query.limit(100)]
-    );
-
-    console.log("response", response);
-    setMessages(response.documents);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      user_id: user.$id,
-      username: user.name,
-      body: messageBody,
-    };
-
-    const response = await databases.createDocument(
-      DATABASE_ID,
-      COLLECTION_ID_MESSAGES,
-      ID.unique(),
-      payload
-    );
-
-    console.log("Created!", response);
-    setMessageBody("");
-  };
-
-  const deleteMessage = async (message_id) => {
-    console.log(messages);
-    await databases.deleteDocument(
-      DATABASE_ID,
-      COLLECTION_ID_MESSAGES,
-      message_id
-    );
-  };
-
+  
+  
   return (
     <ChatContainer>
-      <div className="main-content">
-        {messages.map((message) => {
-          return (
-            <div className="message received" key={message.$id}>
-              <span>{new Date(message.$createdAt).toLocaleString()}</span>
-              <p>{message.body}</p>
-
-              <button
-                className="btn"
-                onClick={() => deleteMessage(message.$id)}
-              >
-                Delete
-              </button>
-            </div>
-          );
-        })}
+  
+    <div className="main-content">
+      {messages.map((message) => {
+        return (
+          <div
+            className={`message ${message.sent ? "sent" : "received"}`}
+            key={message.$id}
+          >
+            <span>{new Date(message.$createdAt).toLocaleString()}</span>
+            <p>{message.body}</p>
+  
+            <button className="btn" onClick={() => deleteMessage(message.$id)}>
+              Delete
+            </button>
+          </div>
+        );
+      })}
+    </div>
+    <form id="message--form" onSubmit={() => console.log("submit")}>
+      <div className="message-input">
+        <input
+          className="input"
+          type="text"
+          placeholder="Type a message..."
+          required
+          maxLength={1000}
+          onChange={(e) => setMessageBody(e.target.value)}
+          value={messageBody}
+        />
+        <input value="Send" type="submit" className="send-button" />
       </div>
-      <form id="message--form" onSubmit={handleSubmit}>
-        <div className="message-input">
-          <input
-            className="input"
-            type="text"
-            placeholder="Type a message..."
-            required
-            maxLength={1000}
-            onChange={(e) => {
-              setMessageBody(e.target.value);
-            }}
-            value={messageBody}
-          />
-          <input value={"Send"} type="submit" className="send-button" />
-        </div>
-      </form>
-    </ChatContainer>
+    </form>
+  </ChatContainer>
   );
 };
 
@@ -138,78 +53,106 @@ const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 400px;
+  width: 100%;
   margin: auto;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 10px;
   overflow: hidden;
-  background: #f4f4f4;
+  background: #f9f9f9;
 
   .main-content {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-    background: #ffffff;
-    border-bottom: 1px solid #ddd;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 2px solid #ddd;
 
     .message {
-      margin-bottom: 15px;
-      padding: 12px 16px;
-      border-radius: 20px;
-      color: #000000; /* Black text color */
-      max-width: 80%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      max-width: 90%;
+      font-size: 16px;
+      color: #333;
       display: inline-block;
       word-wrap: break-word;
-      font-size: 16px;
-      line-height: 1.5;
+      line-height: 1.6;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
 
       &.received {
-        background: #e9ecef;
+        background: #ffffff;
         text-align: left;
         border: 1px solid #ddd;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       &.sent {
-        background: #cce5ff;
+        background: #d1e7dd;
         text-align: right;
-        border: 1px solid #b8daff;
         margin-left: auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #badbcc;
       }
 
       p {
         margin: 0;
+      }
+
+      span {
+        font-size: 12px;
+        color: #999;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      button.btn {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #007bff;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
 
   .message-input {
     display: flex;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    background: white;
+    width: 100%;
+    padding: 15px;
+    background: #ffffff;
+    border-top: 2px solid #ddd;
 
     .input {
       flex: 1;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 20px;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 30px;
       font-size: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       outline: none;
+      box-shadow: none;
+      transition: border-color 0.3s ease-in-out;
+
+      &:focus {
+        border-color: #007bff;
+      }
     }
 
     .send-button {
+      padding: 14px 20px;
       margin-left: 10px;
-      padding: 12px 20px;
       border: none;
       background: #007bff;
-      color: white;
-      border-radius: 20px;
+      color: #fff;
+      border-radius: 30px;
       cursor: pointer;
       font-size: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
 
       &:hover {
         background: #0056b3;

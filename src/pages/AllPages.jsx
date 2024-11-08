@@ -5,7 +5,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { handleEditorColor } from "../store/slices/SliceDatas";
 
 function AllPages() {
-  const { user } = useSelector((store) => store.allData);
   const [isLightMode, setIsLightMode] = useState(false);
   const dispatch = useDispatch();
 
@@ -21,7 +20,7 @@ function AllPages() {
 
   return (
     <>
-      {user ? (
+   
         <div className="container px-4" id="home">
           <div id="container">
             <header className="pt-4 d-flex  align-items-center justify-between">
@@ -44,9 +43,7 @@ function AllPages() {
             <Outlet />
           </div>
         </div>
-      ) : (
-        <Navigate to={"/login"} />
-      )}
+      
     </>
   );
 }
