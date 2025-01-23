@@ -39,6 +39,7 @@ function CompletePage() {
   const [lanSelect, setLanSelect] = useState(languages);
   const [lastLang, setLastLang] = useState("javascript");
   const [myResult, setMyResult] = useState(0);
+  const [myResultText, setMyResultText] = useState("");
   const [allCheked, setAllCheked] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [fullEkran, setFullEkran] = useState(false);
@@ -103,8 +104,10 @@ function CompletePage() {
       result.output
         .substr(0, result.output.length - 1)
         .split("\n")
-        .map(Number)
+        .map(Number || String)
     );
+
+    setMyResultText(result.output)
   };
 
   const onlanSelectChange = (value) => {
@@ -251,9 +254,6 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
       <div className="set-bg-color" id="question-element">
         <div className="row" id="cards-question">
 
-
-
-
            <ResultSection
             fullEkran={fullEkran}
             navigate={navigate}
@@ -263,6 +263,9 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
             pogination={pogination}
             question={question}
             myResult={myResult}
+            myResultText={myResultText}
+            setMyResult={setMyResult}
+            setMyResultText={setMyResultText}
           />
 
 

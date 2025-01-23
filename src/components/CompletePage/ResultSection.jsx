@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { FaArrowLeft, FaCircleCheck, FaHouse } from "react-icons/fa6";
 
 const ResultSection = ({
@@ -9,7 +10,14 @@ const ResultSection = ({
   pogination,
   question,
   myResult,
+  myResultText,setMyResult,setMyResultText
 }) => {
+
+   useEffect(() => {
+    setMyResult(0)
+    setMyResultText("")
+  },[nextPre])
+
   return (
     <div
       className={`card-question col-12 col-lg-12 text-center text-xl-start ${
@@ -88,8 +96,8 @@ const ResultSection = ({
             >
               <p className="m-0 p-0">{example}</p>
 
-              <button
-                className={`btn ${
+              <div
+                className={`p-2 rounded ${
                   myResult === 0
                     ? " "
                     : myResult[index] === question.answers[index]
@@ -99,10 +107,15 @@ const ResultSection = ({
                 id="resultBtn"
               >
                 Javobingiz: <span id="result">{myResult[index]}</span>
-              </button>
+              </div>
             </div>
           ))}
         </div>
+      </div>
+
+      <div>
+
+  <div className={`${"text-red-500" && myResultText !== ""} text-center p-2 mt-4 `}>{myResultText}</div> 
       </div>
     </div>
   );

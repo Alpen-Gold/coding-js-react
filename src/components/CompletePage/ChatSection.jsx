@@ -11,8 +11,7 @@ const ChatSection = () => {
   
   return (
     <ChatContainer>
-  
-    <div className="main-content">
+    <div className="main-content bg-gre">
       {messages.map((message) => {
         return (
           <div
@@ -58,7 +57,8 @@ const ChatContainer = styled.div`
   border: none;
   border-radius: 10px;
   overflow: hidden;
-  background: #f9f9f9;
+  background: green;
+  margin-top: 100px;
 
   .main-content {
     flex: 1;

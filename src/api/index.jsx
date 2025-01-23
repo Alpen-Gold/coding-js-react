@@ -151,7 +151,7 @@ export const executeCode = async (
       })
       .join("")}`;
 
-    console.log(forTheChekLog(sourceCode, check, startSize, lastLang));
+    console.log(forTheChekLog(sourceCode, check, startSize, lastLang),"salom");
     console.log(checkList, checkList);
 
     const response = await baseUrlEditor.post("execute", {

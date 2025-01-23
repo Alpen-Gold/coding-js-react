@@ -11,6 +11,7 @@ import AllPages from "./pages/AllPages";
 import QuestionPage from "./pages/QuestionPage";
 import CompletePage from "./pages/CompletePage";
 import Leyout from "./admin/Leyout";
+import Register from "./pages/authorisation/SignUp";
 
 function App() {
   const router = createBrowserRouter(
@@ -26,6 +27,7 @@ function App() {
         </Route>
 
         <Route path="/admin" element={<Leyout />}></Route>
+        <Route path="/register" element={<Register />}></Route>
       </>
     )
   );
