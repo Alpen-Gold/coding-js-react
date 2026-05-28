@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const ChatSection = () => {
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([localStorage.getItem("massagesByChat") || {id: 1,body:"salom",sent:true}]);
   const [messageBody, setMessageBody] = useState("");
   
   
@@ -28,20 +28,36 @@ const ChatSection = () => {
         );
       })}
     </div>
-    <form id="message--form" onSubmit={() => console.log("submit")}>
-      <div className="message-input">
-        <input
-          className="input"
-          type="text"
-          placeholder="Type a message..."
-          required
-          maxLength={1000}
-          onChange={(e) => setMessageBody(e.target.value)}
-          value={messageBody}
-        />
-        <input value="Send" type="submit" className="send-button" />
-      </div>
-    </form>
+    <form
+  id="message--form"
+  onSubmit={(e) => {
+    e.preventDefault();
+
+    const newMessage = {
+      id: messages.length > 0 ? messages[messages.length - 1].id + 1 : 1,
+      body: messageBody,
+      sent: true,
+    };
+
+    const updatedMessages = [...messages, newMessage];
+    localStorage.setItem("massagesByChat", JSON.stringify(updatedMessages));
+    setMessages(updatedMessages);
+    setMessageBody(""); 
+  }}
+>
+  <div className="message-input">
+    <input
+      className="input"
+      type="text"
+      placeholder="Type a message..."
+      required
+      maxLength={1000}
+      onChange={(e) => setMessageBody(e.target.value)}
+      value={messageBody}
+    />
+    <input value="Send" type="submit" className="send-button" />
+  </div>
+</form>
   </ChatContainer>
   );
 };
