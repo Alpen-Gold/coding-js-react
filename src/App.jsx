@@ -12,6 +12,7 @@ import QuestionPage from "./pages/QuestionPage";
 import CompletePage from "./pages/CompletePage";
 import Leyout from "./admin/Leyout";
 import Register from "./pages/authorisation/SignUp";
+import Login from "./pages/authorisation/Login";
 
 function App() {
   const router = createBrowserRouter(
@@ -28,6 +29,7 @@ function App() {
 
         <Route path="/admin" element={<Leyout />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/login" element={<Login />}></Route>
       </>
     )
   );

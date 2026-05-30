@@ -11,7 +11,6 @@ import {
 import { LANGUAGE_VERSIONS } from "../constants/constants";
 import { useNavigate } from "react-router-dom";
 
-
 const baseUrlEditor = axios.create({
   baseURL: "https://emkc.org/api/v2/piston/",
 });
@@ -142,6 +141,7 @@ export const executeCode = async (
     }
 
     const languageVersion = LANGUAGE_VERSIONS[lastLang];
+    console.log(LANGUAGE_VERSIONS[lastLang], "firdavs test ");
 
     const checkList = `${sourceCode} ${check
       .map((item) => {
@@ -151,8 +151,8 @@ export const executeCode = async (
       })
       .join("")}`;
 
-    console.log(forTheChekLog(sourceCode, check, startSize, lastLang),"salom");
-    console.log(checkList, checkList);
+    console.log(forTheChekLog(sourceCode, check, startSize, lastLang), "salom");
+    console.log(checkList);
 
     const response = await baseUrlEditor.post("execute", {
       language: lastLang,
@@ -196,4 +196,3 @@ export const getQuestionPog = async (item) => {
     dispatch(handleLoading(false));
   }
 };
-

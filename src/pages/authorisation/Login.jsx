@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -55,3 +57,5 @@ const Login = () => {
     </div>
   );
 };
+
+export default Login;

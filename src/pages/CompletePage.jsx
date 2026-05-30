@@ -107,7 +107,7 @@ function CompletePage() {
         .map(Number || String)
     );
 
-    setMyResultText(result.output)
+    setMyResultText(result.output);
   };
 
   const onlanSelectChange = (value) => {
@@ -253,8 +253,7 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
       )}
       <div className="set-bg-color" id="question-element">
         <div className="row" id="cards-question">
-
-           <ResultSection
+          <ResultSection
             fullEkran={fullEkran}
             navigate={navigate}
             questionId={questionId}
@@ -267,7 +266,6 @@ echo ${startSize.slice(0, startSize.indexOf(" "))}(${item}) . "\n";
             setMyResult={setMyResult}
             setMyResultText={setMyResultText}
           />
-
 
           <div
             className={`card-question mt-5 m-xl-0 col-12 col-lg-12 ${
